@@ -304,7 +304,7 @@ def intersection_over_union(c, r, c_list, r_list):
     return self_coverage
 
 
-def distance_of_2Dpoint(p1, p2):
+def distance_of_2D_point(p1, p2):
     return np.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 
@@ -319,7 +319,6 @@ def calculate_angles(segments):
     sin_theta = np.sqrt(1 - cos_theta**2)
 
     return sin_theta, cos_theta
-
 
 class Line_Clustering:
     def __init__(self, name="Line_Clustering"):
@@ -369,23 +368,23 @@ class Line_Clustering:
             middles_x.append((start_x + end_x) / 2)
             middles_y.append((start_y + end_y) / 2)
             self.line_r.append(
-                distance_of_2Dpoint((start_x, start_y), (end_x, end_y)) / 2
+                distance_of_2D_point((start_x, start_y), (end_x, end_y)) / 2
             )
         self.line_c = np.array([middles_x, middles_y]).T
         self.line_r = np.array(self.line_r)
 
     def calc_circle_coverages(self, obj):
-        # anchor infomation
+        # anchor information
         start_x = obj[0]
         start_y = obj[1]
         end_x = obj[2]
         end_y = obj[3]
         middle_x = (start_x + end_x) / 2
         middle_y = (start_y + end_y) / 2
-        ridus = distance_of_2Dpoint((start_x, start_y), (end_x, end_y)) / 2
+        radius = distance_of_2D_point((start_x, start_y), (end_x, end_y)) / 2
         c1 = (middle_x, middle_y)
         # Calculate intersection over union for circle C and set L
-        coverages = intersection_over_union(c1, ridus, self.line_c, self.line_r)
+        coverages = intersection_over_union(c1, radius, self.line_c, self.line_r)
         return coverages
 
     def circle_LDBSCAN(self, lines, r=0.7, min_samples=1):

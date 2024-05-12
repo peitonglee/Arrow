@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from utils.lines_tools import (
     Line_Clustering,
-    distance_of_2Dpoint,
+    distance_of_2D_point,
     plot_lines,
     line_equation,
     intersection_point,
@@ -16,9 +16,9 @@ from utils.lines_tools import (
 
 # 路径处理
 ROOT = "./"
-floder_name = "arrow_lines_first"
+folder_name = "arrow_lines_first"
 file_name = "950.txt"
-file_path = os.path.join(ROOT, floder_name, file_name)
+file_path = os.path.join(ROOT, folder_name, file_name)
 
 # 线段聚类工具
 line_cluster = Line_Clustering(name="Line_Clustering")
@@ -140,7 +140,6 @@ def cluster_line(lines_pca, visual=False, class_type="box"):
 
     return labels
 
-
 def remove_duplicates(lines, labels):
     """
     去重
@@ -212,7 +211,7 @@ def close_lines(lines):
     final_lines_index = []
 
     for i in range(len(lines)):
-
+        # FIXME: 可以利用2维表来维护下一条直线
         if len(final_lines) != 0:
             # 为了形成有顺序的线段，需要将选出来的最后一个线段的终止点作为下一条线的起始点
             last_end_point = final_lines[-1][-1]
@@ -233,7 +232,7 @@ def close_lines(lines):
                 for h in range(have_same_point_with_last_end_point.shape[0]):
                     q1 = lines[have_same_point_with_last_end_point[h]][:2]
                     q2 = lines[have_same_point_with_last_end_point[h]][2:]
-                    min_distance = min(distance_of_2Dpoint(p, q1), distance_of_2Dpoint(p, q2))
+                    min_distance = min(distance_of_2D_point(p, q1), distance_of_2D_point(p, q2))
                     if h == 0 or min_distance < minimum_distance:
                         minimum_distance = min_distance
                         cur_target_index = have_same_point_with_last_end_point[h]
@@ -268,7 +267,7 @@ def close_lines(lines):
                     cur_points[end_index, 0],
                     cur_points[end_index, 1],
                 ]
-                # 计算新生成的线段和目标线段的长度交并比, TODO: 这里还有很致命的问题
+                
                 curL_2_targetL_overlap_length = overlap_length(cur_line, target_line)
                 if curL_2_targetL_overlap_length == 0:
                     continue  # 没有交集直接跳过
@@ -305,7 +304,6 @@ if __name__ == "__main__":
         final_lines = remove_duplicates(PCA_point, labels)  # 去重复
         plot_lines(final_lines,
                    title="The Segments after Remove Duplicates")  # 绘制聚类后的线段
-
     if 1:
         # 闭合线段
         # 定义线: 2D端点组成
